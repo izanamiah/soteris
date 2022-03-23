@@ -1,0 +1,26 @@
+
+##Bundle
+pyinstaller --noconfirm my_application.spec
+
+#CodeSign
+codesign  -v --deep --force --timestamp --entitlements entitlements.plist -o runtime -s "Developer ID Application: Jun Liu (E9Y3V7QQ73)" "dist/Soteris Encrypt.app"
+
+##Make a zip for submission
+ditto -c -k --keepParent "dist/Soteris Encrypt.app" dist/SoterisEncrypt.zip
+
+## Notarize
+xcrun notarytool submit dist/SoterisEncrypt.zip --wait --keychain-profile "notary-soteris"
+
+##Staple
+xcrun stapler staple "dist/Soteris Encrypt.app"
+
+##Verify
+spctl --assess --type execute -vvv "dist/Soteris Encrypt.app"
+
+##DMG
+./builddmg.sh
+
+
+##App Specific password
+name: Soteris
+gblu-lzvw-cehk-fuvi
